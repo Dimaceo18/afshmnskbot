@@ -1,10 +1,12 @@
 import asyncio
 import logging
 import os
+import threading
 from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from dotenv import load_dotenv
+from http.server import HTTPServer, BaseHTTPRequestHandler
 
 # Загружаем переменные окружения
 load_dotenv()
@@ -36,6 +38,18 @@ welcome_text = (
     "Я помогу вам разместить информацию о вашем мероприятии.\n\n"
     "Выберите нужный вариант ниже:"
 )
+
+# --- ПРОСТОЙ HTTP-СЕРВЕР ДЛЯ РЕНДЕРА ---
+class HealthCheckHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"Bot is running")
+
+def run_http_server():
+    port = int(os.getenv("PORT", 10000))
+    server = HTTPServer(('0.0.0.0', port), HealthCheckHandler)
+    server.serve_forever()
 
 # --- ОБРАБОТЧИКИ ---
 
@@ -94,9 +108,13 @@ async def handle_other_messages(message: types.Message):
         reply_markup=main_kb
     )
 
-# --- ЗАПУСК БОТА ---
+# --- ЗАПУСК БОТА С ВЕБ-СЕРВЕРОМ ---
 async def main():
     print("🤖 Бот запущен и готов к работе...")
+    # Запускаем HTTP-сервер в отдельном потоке
+    http_thread = threading.Thread(target=run_http_server, daemon=True)
+    http_thread.start()
+    print(f"✅ HTTP-сервер запущен на порту {os.getenv('PORT', 10000)}")
     await dp.start_polling()
 
 if __name__ == "__main__":
