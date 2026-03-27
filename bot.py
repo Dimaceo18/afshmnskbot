@@ -1,9 +1,9 @@
 import asyncio
 import logging
 import os
+import signal
 from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
-from aiogram.dispatcher import filters
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from dotenv import load_dotenv
 
@@ -21,7 +21,7 @@ bot = Bot(token=BOT_TOKEN)
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
 
-# --- КЛАВИАТУРА ---
+# --- КЛАВИАТУРА (всегда видна) ---
 main_kb = ReplyKeyboardMarkup(
     keyboard=[
         [KeyboardButton(text="📅 Прислать афишу")],
@@ -39,6 +39,7 @@ welcome_text = (
 )
 
 # --- ОБРАБОТЧИКИ ---
+
 @dp.message_handler(commands=['start'])
 async def cmd_start(message: types.Message):
     await message.answer(
@@ -63,21 +64,20 @@ async def handle_send_event(message: types.Message):
         "мы можем предложить вам эффективное и комплексное решение. "
         "Для этого нажмите на кнопку *«Разместить рекламу»*."
     )
-    await message.answer(text, parse_mode="Markdown", reply_markup=main_kb)
+    await message.answer(
+        text,
+        parse_mode="Markdown",
+        reply_markup=main_kb
+    )
 
 @dp.message_handler(lambda message: message.text == "💰 Разместить рекламу")
 async def handle_advertising(message: types.Message):
-    ad_text = (
-        "📢 *Реклама в канале «Афиша Минска»*\n\n"
-        "Вы можете воспользоваться нашими платными услугами для продвижения вашего мероприятия:\n"
-        "• Посты в крупнейших Инстаграм-аккаунтах Минска\n"
-        "• Сторисы в Инстаграм \n\n"
-        "• Посты в телеграм-каналах\n"
-        "• Коллаборации с популярными блогерами \n\n"
-        "📩 *Для связи с менеджером:*\n"
-        "Напишите нашему менеджеру @stridiv\n"
+  ad_text = ( "📢 *Реклама в канале «Афиша Минска»*\n\n" "Вы можете воспользоваться нашими платными услугами для продвижения вашего мероприятия:\n" "• Посты в крупнейших Инстаграм-аккаунтах Минска\n" "• Сторисы в Инстаграм \n\n" "• Посты в телеграм-каналах\n" "• Коллаборации с популярными блогерами \n\n" "📩 *Для связи с менеджером:*\n" "Напишите нашему менеджеру @stridiv\n" )
+    await message.answer(
+        ad_text,
+        parse_mode="Markdown",
+        reply_markup=main_kb
     )
-    await message.answer(ad_text, parse_mode="Markdown", reply_markup=main_kb)
 
 @dp.message_handler()
 async def handle_other_messages(message: types.Message):
@@ -86,10 +86,41 @@ async def handle_other_messages(message: types.Message):
         reply_markup=main_kb
     )
 
+# --- ГРАЦИОЗНОЕ ЗАВЕРШЕНИЕ ---
+async def shutdown(loop, bot=None):
+    if bot:
+        await bot.delete_webhook()  # Удаляем вебхук, если был
+        await bot.close()  # Закрываем сессию
+    tasks = [t for t in asyncio.all_tasks() if t is not asyncio.current_task()]
+    for task in tasks:
+        task.cancel()
+    await asyncio.gather(*tasks, return_exceptions=True)
+    loop.stop()
+
 # --- ЗАПУСК БОТА ---
 async def main():
     print("🤖 Бот запущен и готов к работе...")
-    await dp.start_polling()
+    
+    # Удаляем старые вебхуки и обновления
+    await bot.delete_webhook()
+    await bot.send_message(chat_id=os.getenv("ADMIN_CHAT_ID", ""), text="✅ Бот запущен") if os.getenv("ADMIN_CHAT_ID") else None
+    
+    try:
+        await dp.start_polling()
+    except Exception as e:
+        print(f"Ошибка: {e}")
+    finally:
+        await bot.close()
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    
+    # Обработка сигналов завершения
+    for sig in (signal.SIGINT, signal.SIGTERM):
+        loop.add_signal_handler(sig, lambda: asyncio.create_task(shutdown(loop, bot)))
+    
+    try:
+        loop.run_until_complete(main())
+    finally:
+        loop.close()
