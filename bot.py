@@ -1,10 +1,10 @@
 import asyncio
 import logging
 import os
-from aiogram import Bot, Dispatcher, types, F
-from aiogram.filters import CommandStart
+from aiogram import Bot, Dispatcher, types
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from aiogram.dispatcher import filters
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
-from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 
 # Загружаем переменные окружения
@@ -18,7 +18,8 @@ if not BOT_TOKEN:
 logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=BOT_TOKEN)
-dp = Dispatcher()
+storage = MemoryStorage()
+dp = Dispatcher(bot, storage=storage)
 
 # --- КЛАВИАТУРА ---
 main_kb = ReplyKeyboardMarkup(
@@ -38,15 +39,15 @@ welcome_text = (
 )
 
 # --- ОБРАБОТЧИКИ ---
-@dp.message(CommandStart())
+@dp.message_handler(commands=['start'])
 async def cmd_start(message: types.Message):
     await message.answer(
         welcome_text,
-        parse_mode=ParseMode.MARKDOWN,
+        parse_mode="Markdown",
         reply_markup=main_kb
     )
 
-@dp.message(F.text == "📅 Прислать афишу")
+@dp.message_handler(lambda message: message.text == "📅 Прислать афишу")
 async def handle_send_event(message: types.Message):
     text = (
         "📝 *Здравствуйте!*\n\n"
@@ -62,9 +63,9 @@ async def handle_send_event(message: types.Message):
         "мы можем предложить вам эффективное и комплексное решение. "
         "Для этого нажмите на кнопку *«Разместить рекламу»*."
     )
-    await message.answer(text, parse_mode=ParseMode.MARKDOWN, reply_markup=main_kb)
+    await message.answer(text, parse_mode="Markdown", reply_markup=main_kb)
 
-@dp.message(F.text == "💰 Разместить рекламу")
+@dp.message_handler(lambda message: message.text == "💰 Разместить рекламу")
 async def handle_advertising(message: types.Message):
     ad_text = (
         "📢 *Реклама в канале «Афиша Минска»*\n\n"
@@ -76,20 +77,19 @@ async def handle_advertising(message: types.Message):
         "Напишите @YOUR_MANAGER_USERNAME\n"
         "Или отправьте ваше коммерческое предложение сюда — мы свяжемся с вами."
     )
-    await message.answer(ad_text, parse_mode=ParseMode.MARKDOWN, reply_markup=main_kb)
+    await message.answer(ad_text, parse_mode="Markdown", reply_markup=main_kb)
 
-@dp.message(F.text)
+@dp.message_handler()
 async def handle_other_messages(message: types.Message):
-    if message.text not in ["📅 Прислать афишу", "💰 Разместить рекламу"]:
-        await message.answer(
-            "Пожалуйста, используйте кнопки ниже для взаимодействия с ботом.",
-            reply_markup=main_kb
-        )
+    await message.answer(
+        "Пожалуйста, используйте кнопки ниже для взаимодействия с ботом.",
+        reply_markup=main_kb
+    )
 
-# --- ЗАПУСК БОТА (для Render используем веб-хуки или polling) ---
+# --- ЗАПУСК БОТА ---
 async def main():
-    # Для Render используем polling (проще)
-    await dp.start_polling(bot)
+    print("🤖 Бот запущен и готов к работе...")
+    await dp.start_polling()
 
 if __name__ == "__main__":
     asyncio.run(main())
