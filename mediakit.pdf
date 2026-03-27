@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Медиа-кит — ЗАРАЗ МЕДИА</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            background-color: #FFFFFF;
+            color: #1A1A1A;
+            line-height: 1.5;
+        }
+
+        /* Контейнер для печати */
+        .mediakit-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Обложка */
+        .cover {
+            text-align: center;
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #F8F9FA 0%, #FFFFFF 100%);
+            border-radius: 40px;
+            margin-bottom: 60px;
+            border: 1px solid #E8ECF0;
+        }
+
+        .cover-logo {
+            margin-bottom: 40px;
+        }
+
+        .cover-logo img {
+            height: 80px;
+            width: auto;
+        }
+
+        .cover h1 {
+            font-size: 56px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            color: #000;
+            margin-bottom: 20px;
+        }
+
+        .cover .year {
+            font-size: 24px;
+            color: #F5D742;
+            font-weight: 700;
+            margin-top: 40px;
+        }
+
+        .cover-tagline {
+            font-size: 20px;
+            color: #5A5A5A;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Секции */
+        .section {
+            margin-bottom: 60px;
+            break-inside: avoid;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: #000;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #F5D742;
+            display: inline-block;
+        }
+
+        /* О компании */
+        .about-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            background: #F8F9FA;
+            border-radius: 28px;
+            padding: 40px;
+        }
+
+        .about-text {
+            flex: 2;
+        }
+
+        .about-text p {
+            font-size: 16px;
+            color: #4A4A4A;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .stats-mini {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .stat-mini-item {
+            background: #FFFFFF;
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .stat-mini-number {
+            font-size: 32px;
+            font-weight: 800;
+            color: #F5D742;
+        }
+
+        .stat-mini-label {
+            font-size: 13px;
+            color: #6B6B6B;
+            margin-top: 8px;
+        }
+
+        /* Статистика */
+        .stats-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            justify-content: space-between;
+        }
+
+        .stat-card {
+            flex: 1;
+            background: #F8F9FA;
+            border-radius: 24px;
+            padding: 32px 24px;
+            text-align: center;
+            min-width: 180px;
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 800;
+            color: #F5D742;
+            margin-bottom: 12px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #5A5A5A;
+        }
+
+        /* Аудитория */
+        .audience-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .audience-card {
+            flex: 1;
+            background: #F8F9FA;
+            border-radius: 24px;
+            padding: 28px;
+            text-align: center;
+        }
+
+        .audience-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .audience-card h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .audience-percent {
+            font-size: 36px;
+            font-weight: 800;
+            color: #F5D742;
+            margin: 16px 0;
+        }
+
+        /* Площадки */
+        .platforms-showcase {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .platform-item {
+            flex: 1;
+            background: #F8F9FA;
+            border-radius: 24px;
+            padding: 28px;
+            text-align: center;
+        }
+
+        .platform-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .platform-item h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .platform-stats {
+            font-size: 28px;
+            font-weight: 800;
+            color: #F5D742;
+            margin: 12px 0;
+        }
+
+        /* Тарифы */
+        .tariffs-showcase {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .tariff-mini-card {
+            flex: 1;
+            background: #F8F9FA;
+            border-radius: 24px;
+            padding: 24px;
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .tariff-mini-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .tariff-price {
+            font-size: 28px;
+            font-weight: 800;
+            color: #F5D742;
+            margin: 12px 0;
+        }
+
+        .tariff-desc {
+            font-size: 13px;
+            color: #6B6B6B;
+        }
+
+        /* Блогеры */
+        .bloggers-showcase {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .blogger-mini-card {
+            flex: 1;
+            background: #F8F9FA;
+            border-radius: 24px;
+            padding: 24px;
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .blogger-mini-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .blogger-stats {
+            font-size: 14px;
+            color: #F5D742;
+            font-weight: 600;
+            margin: 8px 0;
+        }
+
+        /* Контакты */
+        .contacts-block {
+            background: #F8F9FA;
+            border-radius: 28px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .contacts-block h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .contacts-info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 24px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
+        }
+
+        .contact-item a {
+            color: #1A1A1A;
+            text-decoration: none;
+        }
+
+        .contact-item a:hover {
+            color: #F5D742;
+        }
+
+        /* Кнопка скачивания */
+        .download-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #F5D742;
+            color: #000;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: 0.2s;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .download-btn:hover {
+            background: #E6C935;
+            transform: translateY(-2px);
+        }
+
+        /* Подвал */
+        .footer {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid #E8ECF0;
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+        }
+
+        /* Для печати */
+        @media print {
+            .download-btn {
+                display: none;
+            }
+            .mediakit-container {
+                padding: 20px;
+            }
+            .cover {
+                page-break-after: avoid;
+            }
+            .section {
+                page-break-inside: avoid;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mediakit-container {
+                padding: 20px;
+            }
+            .cover h1 {
+                font-size: 36px;
+            }
+            .section-title {
+                font-size: 28px;
+            }
+            .stats-grid, .audience-grid, .platforms-showcase, .tariffs-showcase, .bloggers-showcase {
+                flex-direction: column;
+            }
+            .contacts-info {
+                flex-direction: column;
+                align-items: center;
+            }
+            .download-btn {
+                bottom: 20px;
+                right: 20px;
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="#" class="download-btn" id="downloadPDF">📄 Скачать медиа-кит (PDF)</a>
+
+    <div class="mediakit-container" id="mediakit">
+        <!-- Обложка -->
+        <div class="cover">
+            <div class="cover-logo">
+                <img src="logozrz.png" alt="ЗАРАЗ МЕДИА">
+            </div>
+            <h1>МЕДИА-КИТ</h1>
+            <div class="cover-tagline">Реклама в городском контексте Минска</div>
+            <div class="year">2026</div>
+        </div>
+
+        <!-- О компании -->
+        <div class="section">
+            <h2 class="section-title">О компании</h2>
+            <div class="about-grid">
+                <div class="about-text">
+                    <p><strong>ЗАРАЗ МЕДИА</strong> — коммуникативное агентство, специализирующееся на нативной рекламе в городских сообществах и у блогеров Минска.</p>
+                    <p>Мы размещаем бренды так, чтобы это выглядело как естественная часть ленты, а не как чужой рекламный блок. Наша команда работает с 2019 года и провела более 250 успешных кампаний.</p>
+                    <p><strong>Миссия:</strong> Помогать брендам говорить с аудиторией Минска на одном языке, используя доверенные городские медиа и инфлюенсеров.</p>
+                </div>
+                <div class="stats-mini">
+                    <div class="stat-mini-item">
+                        <div class="stat-mini-number">6+ лет</div>
+                        <div class="stat-mini-label">на рынке Минска</div>
+                    </div>
+                    <div class="stat-mini-item">
+                        <div class="stat-mini-number">250+</div>
+                        <div class="stat-mini-label">успешных кампаний</div>
+                    </div>
+                    <div class="stat-mini-item">
+                        <div class="stat-mini-number">150+</div>
+                        <div class="stat-mini-label">партнёров и блогеров</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ключевые показатели -->
+        <div class="section">
+            <h2 class="section-title">Ключевые показатели</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">>1 млн</div>
+                    <div class="stat-label">ежемесячный охват</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">478K</div>
+                    <div class="stat-label">крупнейший Instagram-канал</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1.7M+</div>
+                    <div class="stat-label">общий охват соцсетей</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">клиентов возвращаются</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Аудитория -->
+        <div class="section">
+            <h2 class="section-title">Наша аудитория</h2>
+            <div class="audience-grid">
+                <div class="audience-card">
+                    <div class="audience-icon">👥</div>
+                    <h3>География</h3>
+                    <div class="audience-percent">85%</div>
+                    <p>Минск и Минская область</p>
+                    <p style="margin-top: 8px; color:#6B6B6B;">15% — другие города Беларуси</p>
+                </div>
+                <div class="audience-card">
+                    <div class="audience-icon">👨‍👩‍👧</div>
+                    <h3>Возраст</h3>
+                    <div class="audience-percent">25-44 года</div>
+                    <p>активная, платёжеспособная аудитория</p>
+                    <p style="margin-top: 8px; color:#6B6B6B;">70% — женщины, 30% — мужчины</p>
+                </div>
+                <div class="audience-card">
+                    <div class="audience-icon">📱</div>
+                    <h3>Интересы</h3>
+                    <div class="audience-percent">Городская жизнь</div>
+                    <p>новости, афиша, еда, спорт, бизнес, бытовые вопросы</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Площадки -->
+        <div class="section">
+            <h2 class="section-title">Наши площадки</h2>
+            <div class="platforms-showcase">
+                <div class="platform-item">
+                    <div class="platform-icon">📱</div>
+                    <h3>Паблики о Минске</h3>
+                    <div class="platform-stats">150+</div>
+                    <p>городских сообществ и районных пабликов</p>
+                </div>
+                <div class="platform-item">
+                    <div class="platform-icon">🎬</div>
+                    <h3>Блогеры</h3>
+                    <div class="platform-stats">30+</div>
+                    <p>популярных Instagram- и TikTok-авторов</p>
+                </div>
+                <div class="platform-item">
+                    <div class="platform-icon">💬</div>
+                    <h3>Telegram-каналы</h3>
+                    <div class="platform-stats">20+</div>
+                    <p>новостные и тематические каналы</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Тарифы -->
+        <div class="section">
+            <h2 class="section-title">Пакетные предложения</h2>
+            <div class="tariffs-showcase">
+                <div class="tariff-mini-card">
+                    <h3>МИНИ</h3>
+                    <div class="tariff-price">685 BYN</div>
+                    <div class="tariff-desc">7 площадок Instagram<br>+ stories в 3 каналах</div>
+                    <div class="tariff-desc" style="margin-top: 8px;">📊 860K подписчиков</div>
+                </div>
+                <div class="tariff-mini-card">
+                    <h3>СТАНДАРТ</h3>
+                    <div class="tariff-price">745 BYN</div>
+                    <div class="tariff-desc">11 площадок Instagram<br>+ stories в 6 каналах</div>
+                    <div class="tariff-desc" style="margin-top: 8px;">📊 1.3M подписчиков</div>
+                </div>
+                <div class="tariff-mini-card">
+                    <h3>ПРЕМИУМ</h3>
+                    <div class="tariff-price">905 BYN</div>
+                    <div class="tariff-desc">Instagram (11) + VK (9) + Telegram (2)<br>+ stories в 6 каналах</div>
+                    <div class="tariff-desc" style="margin-top: 8px;">📊 1.7M подписчиков</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Блогеры -->
+        <div class="section">
+            <h2 class="section-title">Топ-блогеры</h2>
+            <div class="bloggers-showcase">
+                <div class="blogger-mini-card">
+                    <h3>@chtopochem_minsk</h3>
+                    <div class="blogger-stats">215 000 подписчиков</div>
+                    <div class="tariff-desc">Reels + сторис + TikTok (87K)</div>
+                    <div class="tariff-price" style="font-size: 20px; margin-top: 12px;">от 1 600 BYN</div>
+                </div>
+                <div class="blogger-mini-card">
+                    <h3>@zatestil</h3>
+                    <div class="blogger-stats">188 000 подписчиков</div>
+                    <div class="tariff-desc">Reels + сторис + TikTok (67K)</div>
+                    <div class="tariff-price" style="font-size: 20px; margin-top: 12px;">от 1 400 BYN</div>
+                </div>
+                <div class="blogger-mini-card">
+                    <h3>@kudaminsk</h3>
+                    <div class="blogger-stats">143 000 подписчиков</div>
+                    <div class="tariff-desc">Reels + сторис + TikTok (30K)</div>
+                    <div class="tariff-price" style="font-size: 20px; margin-top: 12px;">от 1 400 BYN</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Преимущества -->
+        <div class="section">
+            <h2 class="section-title">Почему выбирают нас</h2>
+            <div class="audience-grid">
+                <div class="audience-card">
+                    <div class="audience-icon">🎯</div>
+                    <h3>Нативный формат</h3>
+                    <p>Реклама выглядит как обычный пост, поэтому её дочитывают и доверяют</p>
+                </div>
+                <div class="audience-card">
+                    <div class="audience-icon">🏙️</div>
+                    <h3>Городской контекст</h3>
+                    <p>Говорим на одном языке с аудиторией Минска: районы, заведения, повестка</p>
+                </div>
+                <div class="audience-card">
+                    <div class="audience-icon">📈</div>
+                    <h3>Измеримый результат</h3>
+                    <p>Работаем на узнаваемость, переходы, продажи и посещаемость</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Контакты -->
+        <div class="section">
+            <h2 class="section-title">Контакты</h2>
+            <div class="contacts-block">
+                <h3>Свяжитесь с нами для сотрудничества</h3>
+                <div class="contacts-info">
+                    <div class="contact-item">📞 <a href="tel:+375291405067">+375 (29) 140-50-67</a></div>
+                    <div class="contact-item">✉️ <a href="mailto:info@zaraz.media">info@zaraz.media</a></div>
+                    <div class="contact-item">📍 ул. Октябрьская 19Б, офис 211, Минск</div>
+                </div>
+                <div class="contacts-info">
+                    <div class="contact-item">📸 <a href="https://www.instagram.com/zarazmedia" target="_blank">@zarazmedia</a></div>
+                    <div class="contact-item">💬 <a href="https://t.me/zarazmedia" target="_blank">t.me/zarazmedia</a></div>
+                </div>
+                <p style="margin-top: 24px; font-size: 14px; color: #6B6B6B;">ООО Храмцов Медиа • УНП 192554055</p>
+            </div>
+        </div>
+
+        <!-- Футер -->
+        <div class="footer">
+            <p>© ЗАРАЗ МЕДИА — реклама в городском контексте Минска, 2026</p>
+            <p style="margin-top: 8px;">Медиа-кит актуален на 2026 год. Все цены указаны в белорусских рублях (BYN).</p>
+        </div>
+    </div>
+
+    <script>
+        // Функция для печати/сохранения в PDF
+        document.getElementById('downloadPDF').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.print();
+        });
+
+        // Кнопка наверх для удобства
+        const scrollTopBtn = document.createElement('div');
+        scrollTopBtn.innerHTML = '↑';
+        scrollTopBtn.style.cssText = `
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 44px;
+            height: 44px;
+            background-color: #F5D742;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s;
+            font-size: 20px;
+            font-weight: bold;
+            z-index: 999;
+        `;
+        document.body.appendChild(scrollTopBtn);
+        
+        window.addEventListener('scroll', () => {
+            scrollTopBtn.style.opacity = window.scrollY > 300 ? '1' : '0';
+            scrollTopBtn.style.visibility = window.scrollY > 300 ? 'visible' : 'hidden';
+        });
+        
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
